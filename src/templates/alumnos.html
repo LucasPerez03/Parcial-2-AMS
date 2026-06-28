@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Alumnos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-primary px-4">
+        <span class="navbar-brand">Sistema de Gestión de Alumnos</span>
+        <div>
+            <a href="{{ url_for('alumnos.nuevo_alumno') }}" class="btn btn-light btn-sm me-2">Agregar Alumno</a>
+            <a href="{{ url_for('alumnos.predecir') }}" class="btn btn-light btn-sm me-2">Predecir Promedio</a>
+            <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-light btn-sm">Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <table class="table table-striped table-bordered table-hover">
+            <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Edad</th>
+                    <th>Nota 1</th>
+                    <th>Nota 2</th>
+                    <th>Promedio</th>
+                    <th>Asistencia</th>
+                    <th>¿Aprobado?</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for alumno in alumnos %}
+                <tr>
+                    <td>{{ alumno.id }}</td>
+                    <td>{{ alumno.nombre }}</td>
+                    <td>{{ alumno.apellido }}</td>
+                    <td>{{ alumno.edad }}</td>
+                    <td>{{ alumno.nota_1 }}</td>
+                    <td>{{ alumno.nota_2 }}</td>
+                    <td>{{ "%.1f"|format(alumno.promedio) }}</td>
+                    <td>{{ alumno.asistencia }}</td>
+                    <td>
+                        {% if alumno.aprobado %}
+                            <span class="badge bg-success">Sí</span>
+                        {% else %}
+                            <span class="badge bg-danger">No</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('alumnos.mostrar_edicion', id=alumno.id) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <form action="{{ url_for('alumnos.eliminar_alumno', id=alumno.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
